@@ -108,4 +108,41 @@ function turnHoursToMinutes(moviesArray) {
 }
 
 // BONUS - Iteration 8: Best yearly score average - Best yearly score average
-function bestYearAvg(moviesArray) {}
+function bestYearAvg(moviesArray) {
+    const newMoviesArr = JSON.parse(JSON.stringify(moviesArray))
+    if (moviesArray.length == 0){
+        return null
+    }
+    // Calculate average scores for each year
+    const scoresByYear = {};
+    newMoviesArr.forEach(movie => {
+        if (scoresByYear[movie.year]) {
+            scoresByYear[movie.year].totalScore += movie.score
+            scoresByYear[movie.year].movieCount++;
+        } else {
+            scoresByYear[movie.year] = {
+                totalScore: movie.score,
+                movieCount: 1
+            };
+        }
+    });
+    console.log(scoresByYear)
+
+    // Calculate averages and find the best year
+    let bestYear = 0;
+    let bestAverageScore = 0;
+
+    Object.values(scoresByYear).forEach((year) => {
+        year.avgScore = parseFloat((year.totalScore / year.movieCount).toFixed(2))
+    })
+    
+    for (const year in scoresByYear) {
+        if (bestAverageScore < scoresByYear[year].avgScore) {
+            bestAverageScore = scoresByYear[year].avgScore;
+            bestYear = year;
+        }
+    }
+
+        return `The best year was ${bestYear} with an average score of ${bestAverageScore}`
+
+}
